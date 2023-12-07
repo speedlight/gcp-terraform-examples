@@ -9,17 +9,6 @@ default_environment_variables = [
   { "name": "SOME_ENV", "value": "my_env_var_value" },
 ]
 
-gcpEventFunction_env_vars = [
-  { "name": "FUNCTION_ENV", "value": "some-value" },
-]
-gcpEventFunction_secrets = [
-  {
-    key       = "FUNCTION_SECRET"
-    secret_id = "secret_name" # The name of the secret on GCP Secret Manager.
-    version   = "latest" # Could also point to a specific version number.
-  },
-]
-
 gcpHttpFunctionGen1_env_vars = [
   { "name": "FUNCTION_ENV", "value": "some-value" },
 ]

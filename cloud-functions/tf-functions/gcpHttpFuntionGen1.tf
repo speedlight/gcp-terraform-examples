@@ -12,7 +12,7 @@ variable "gcpHttpFunctionGen1_secrets" {
 
 data "archive_file" "gcpHttpFunctionGen1-zip" {
   type             = "zip"
-  source_dir       = "../../code/python-example-cf/" # replace with the relative path of function's code directory.
+  source_dir       = "../code/python-example-cf/" # replace with the relative path of function's code directory.
   output_path      = "${var.function_zip_path}/gcpHttpFunctionGen1.zip"
   output_file_mode = "0644"
 
