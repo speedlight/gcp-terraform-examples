@@ -1,5 +1,6 @@
-# Cloud Functions provisioning
+# Terraform GCP Cloud Functions provisioning
 
+An opinioated terraform sample project to provision GCP cloud functions.
 
 ---
 ### Adding a new cloud function:
