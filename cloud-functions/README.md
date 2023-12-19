@@ -1,20 +1,29 @@
 # Terraform GCP Cloud Functions provisioning
 
-An opinioated terraform sample project to provision GCP cloud functions.
+An opinionated terraform sample project to provision GCP cloud functions.
+
+This project will deploy three GCP cloud functions named:
+- gcpEventFuntion
+- gcpHttpFunctionGen1
+- gcpHttpFunctionGen2
+
+The sample code used is in the `code` directory.
+
+The following steps are a guide for the case of adding and provision a new cloud function.
 
 ---
 ### Adding a new cloud function:
-In order to provision a cloud function the following steps are required:
+To provision new cloud function we could follow the following steps:
 
-- In the `functions/` directory copy gcpHTTPFunction.tf.example or gcpEventFunction.tf.example to a .tf file depending of what type of function is needed with the name of the function to be create.
-> Example:
+- Add function's code in a directory under the `code` directory.
+- Copy to a new .tf file from one of the samples under the `tf-functions` directory using the desired type of function from the tf files provided.
+> For example for an event cloud function:
   ```sh
-  cp gcpEventFunction.tf.example myAwesomeFunction.tf
+  cp gcpEventFunction.tf myAwesomeFunction.tf
   ```
+- Update all the `gcpEventFunction` occurrences in the file with the name of the function.
 
-- Update all `newFunction` occurrences in the file with the name of the new working function.
-
-- Add a line on `local.tf` similar to the others but with the name of the new function.
+- Add an entry on `local.tf` similar to the one provided others but with the name of the new function.
 > Example:
   ```sh
   myAwesomeFunction_environment_variables = distinct(concat(var.default_environment_variables, var.myAwesomeFunction_env_vars))
@@ -40,25 +49,19 @@ In order to provision a cloud function the following steps are required:
 ### Important note for gen2 cloud functions:
 On gen2 cloud functions, the run invoker binding needs to be set in order to allow correct authentication.
 Run the following gcloud-cli command to set the binding configuration for a deployed gen2 cloud function.
-In the case of need to only allow authentication from another cloud function, replace "allUsers" with "serviceAccount:{emailid}" where `emailid` refers to the email of the service account that runs the cloud function (commonly Compute service account)
+In the case of need to only allow authentication from another cloud function, replace `"allUsers"` with `"serviceAccount:{emailid}"` where `emailid` refers to the email of the service account that runs the cloud function.
 ```sh
 gcloud functions add-invoker-policy-binding FUNCTION_NAME \
       --region="us-central1" \
       --member="allUsers"
 ```
 
+
 ### Terraform environment and common commands
 
 - Terraform installation:
 Follow the instruction on [this](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli#install-terraform) link to install it.
-___ 
-- As the terraform state file is update via GS backend, any update on the state MUST be done using the deployer service account. Contact project owner and DevOps if access to the service account is required.
 
-  To avoid confusion and errors is not recommended to use gcloud-cli iam impersonation especially when working with different gcp projects and different terraform projects. To automatically tell terraform what service account to use (independent of the gcloud-cli account used) the `GOOGLE_APPLICATION_CREDENTIALS` environment variable pointing to the json file could be set.
-  > Example:
-  ```sh
-  export GOOGLE_APPLICATION_CREDENTIALS=deployer-service-account-key.json
-  ```
 ___
 - Initializing terraform:
 
@@ -70,7 +73,7 @@ ___
   ```sh
   terraform validate
   ```
-- To plan a terraform provisioning, the according .tfvars file needs to be specified and the .out file as well.
+- To plan a terraform provisioning, the according .tfvars file needs to be specified.
   > Example:
   ```sh
    terraform plan -var-file="envs/development/development.tfvars" -out=plan.out
